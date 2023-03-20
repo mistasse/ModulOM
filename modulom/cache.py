@@ -35,7 +35,7 @@ CONDITION_SATISFIED = 2
 
 def cache_method(name, f, env=None, debug=False):
     signature = inspect.signature(f)
-    cache_if = signature.parameters.get('_cache_if', None)
+    cache_if = signature.parameters.get('cache_if', None)
     cache_condition = cache_if.default if cache_if is not None and cache_if.default is not inspect._empty else True
     def register(function, name, value):
         if env is not None:
@@ -46,7 +46,7 @@ def cache_method(name, f, env=None, debug=False):
     signature = inspect.Signature([
         RegParameter(p.name, p.kind, default=p.default, annotation=p.annotation,
                      register=partial(register, name))
-        for p in signature.parameters.values() if p.name != '_cache_if'
+        for p in signature.parameters.values() if p.name != 'cache_if'
     ])
     params = list(signature.parameters.values())[1:]
     decl = str(signature)
@@ -149,13 +149,12 @@ class WithCache:
 
 class Graph:
     def __init__(self):
-        self.__current = ['']
-        self._calls = []
+        self.__current = [()]
+        self._graph = collections.defaultdict(set)
         
     def _on_cache(self, event, key, flags):
         if event == 'get':
-            self._calls.append((self.__current[-1], key))
-            print(flags)
+            self._graph[self.__current[-1]].add(key)
         elif event == 'enter':
             self.__current.append(key)
         elif event == 'exit':

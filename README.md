@@ -15,7 +15,7 @@ In the [ModulOM paper](https://openreview.net/pdf?id=264iXDLnD59), we suggested 
 The resulting class instance can become the systematic function parameter, and cache the results so as to avoid recomputations.
 
 ModulOM therefore achieves the following properties:
-- A term is only computed if it is needed, and only once: when it is needed,
+- A term is only computed if it is needed, and only once: when it is needed for the first time,
 - Easy access to any of the terms from within, but also outside of the ModulOM,
 - Multiple inheritance allows for easy combination to explore of the possible systems.
 
