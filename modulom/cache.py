@@ -147,14 +147,14 @@ class WithCache:
             ret[name][k[1:]] = v
         return dict(ret)
 
-class Graph:
+class Dependencies:
     def __init__(self):
         self.__current = [()]
-        self._graph = collections.defaultdict(set)
+        self._dependencies = collections.defaultdict(set)
         
     def _on_cache(self, event, key, flags):
         if event == 'get':
-            self._graph[self.__current[-1]].add(key)
+            self._dependencies[self.__current[-1]].add(key)
         elif event == 'enter':
             self.__current.append(key)
         elif event == 'exit':

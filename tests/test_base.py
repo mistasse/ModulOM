@@ -1,4 +1,4 @@
-from modulom import WithCache, Graph
+from modulom import WithCache, Dependencies
 
 
 class Example(WithCache):
@@ -20,7 +20,7 @@ def test_Example():
     assert a1 != a2 and a1 != t
 
 
-class GraphExample(Graph,WithCache):
+class DepsExample(Dependencies,WithCache):
     def a(self, param=None, cache_if='param is None'):
         return object(),self.x()
 
@@ -34,14 +34,14 @@ class GraphExample(Graph,WithCache):
         return object()
     
 
-def test_GraphExample():
-    e = GraphExample()
+def test_DepsExample():
+    e = DepsExample()
     t = e.a()
     assert t == e.a() == e.b() != e.c()
     a1, a2 = e.a(0), e.a(0)
     assert a1 != a2 and a1 != t
-    graph = e._graph
-    assert graph[('b',)] == {('a',None)}
-    assert graph[('c',)] == {('a',0)}
-    assert graph[('a',None)] == {('x',)}
-    assert graph[('a',0)] == {('x',)}
+    deps = e._dependencies
+    assert deps[('b',)] == {('a',None)}
+    assert deps[('c',)] == {('a',0)}
+    assert deps[('a',None)] == {('x',)}
+    assert deps[('a',0)] == {('x',)}

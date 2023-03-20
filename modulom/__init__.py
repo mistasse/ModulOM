@@ -1,1 +1,1 @@
-from .cache import WithCache, Graph
+from .cache import WithCache, Dependencies
